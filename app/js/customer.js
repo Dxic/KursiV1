@@ -397,7 +397,6 @@
         });
         polling = setInterval(refresh, 3000);
       },
-      live: true
     };
     return {
       html: '<div class="cust-wrap">' +
