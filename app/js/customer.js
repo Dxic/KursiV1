@@ -22,7 +22,7 @@
   }
   function guard(c) {
     if (!c.table) {
-      return '<div class="cust-wrap"><div class="empty-state" style="margin-top:20vh">' + UI().icon('alert', 34) + '<h4>Meja tidak valid</h4><p class="muted">QR code ini tidak cocok dengan meja aktif.br>Silakan scan ulang kode di meja Anda.</p></div></div>';
+      return '<div class="cust-wrap"><div class="empty-state" style="margin-top:20vh">' + UI().icon('alert', 34) + '<h4>Meja tidak valid</h4><p class="muted">QR code ini tidak cocok dengan meja aktif.<br>Silakan scan ulang kode di meja Anda.</p></div></div>';
     }
     return null;
   }
@@ -68,15 +68,15 @@
         '<p class="tagline">' + esc(s.tagline) + '</p>' +
         '</div></div>' +
         '<div class="welcome-body">' +
-        '<div class="table-hero glass"><span class="th-label">You are seated at</span><span class="th-name">' + esc(c.table.name) + '</span><span class="th-zone">' + esc(c.table.zone) + ' · ' + c.table.seats + ' seats</span></div>' +
-        '<h2 class="welcome-title">Welcome to ' + esc(s.cafeName) + '</h2>' +
-        '<p class="muted">Browse the menu and order directly from your table. Your food and drinks will be prepared fresh and served right here · no waiter needed.</p>' +
+        '<div class="table-hero glass"><span class="th-label">Anda duduk di</span><span class="th-name">' + esc(c.table.name) + '</span><span class="th-zone">' + esc(c.table.zone) + ' · ' + c.table.seats + ' kursi</span></div>' +
+        '<h2 class="welcome-title">Selamat datang di ' + esc(s.cafeName) + '</h2>' +
+        '<p class="muted">Telusuri menu dan pesan langsung dari meja Anda. Makanan dan minuman disiapkan segar dan diantar ke sini · tanpa perlu pelayan.</p>' +
         '<ul class="welcome-points">' +
-        '<li>' + UI().icon('qr', 16) + ' Scan once · your table is linked automatically</li>' +
-        '<li>' + UI().icon('flame', 16) + ' Customize drinks exactly how you like them</li>' +
-        '<li>' + UI().icon('timer', 16) + ' Track your order live from the kitchen</li>' +
+        '<li>' + UI().icon('qr', 16) + ' Cukup scan sekali · meja Anda otomatis terhubung</li>' +
+        '<li>' + UI().icon('flame', 16) + ' Atur minuman sesuai selera Anda</li>' +
+        '<li>' + UI().icon('timer', 16) + ' Pantau pesanan Anda secara langsung dari dapur</li>' +
         '</ul>' +
-        '<a class="btn btn-primary btn-lg btn-block" href="#/t/' + c.code + '/menu">View Menu ' + UI().icon('arrowRight', 18) + '</a>' +
+        '<a class="btn btn-primary btn-lg btn-block" href="#/t/' + c.code + '/menu">Lihat Menu ' + UI().icon('arrowRight', 18) + '</a>' +
         '<p class="welcome-foot">' + esc(s.branch) + '</p>' +
         '</div></div>'
     };
@@ -97,13 +97,13 @@
       html: '<div class="cust-wrap has-bn">' +
         custHeader(c, 'Menu') +
         '<div class="menu-subhead"><span class="dot-live"></span><div><strong>Makan di Tempat · ' + esc(c.table.name) + '</strong><span class="muted">Pesan langsung · Diantar ke kursi Anda</span></div><span class="wifi-chip">' + UI().icon('wifi', 13) + ' ' + esc(s.wifi) + '</span></div>' +
-        '<div class="search-bar" id="menu-search">' + UI().icon('search', 17) + '<input id="menu-q" type="search" placeholder="Search artisan coffee, brunch, desserts..." autocomplete="off"></div>' +
+        '<div class="search-bar" id="menu-search">' + UI().icon('search', 17) + '<input id="menu-q" type="search" placeholder="Cari kopi, brunch, dessert..." autocomplete="off"></div>' +
         '<div class="cat-scroll" id="cat-scroll">' +
         '<button class="cat-chip active" data-cat="all">Semua Item</button>' +
         cats.map(cat => '<button class="cat-chip" data-cat="' + cat.id + '">' + esc(cat.name) + '</button>').join('') +
         '</div>' +
         (seasonal ? '<a class="seasonal-card" href="#/t/' + c.code + '/p/' + seasonal.id + '">' +
-          '<span class="sc-flag">' + UI().icon('star', 12) + ' SEASONAL ROAST</span>' +
+          '<span class="sc-flag">' + UI().icon('star', 12) + ' SANGAI MUSIMAN</span>' +
           '<h3>Flores Bajawa Pour Over &amp; Gula Aren Latte</h3>' +
           '<p>Light floral jasmine notes paired with smoky palm nectar, sourced from local smallholders in East Nusa Tenggara.</p>' +
           '<span class="sc-cta">Mulai dari ' + fmtRp(seasonal.price) + ' · Lihat Detail ' + UI().icon('arrowRight', 14) + '</span></a>' : '') +
@@ -120,8 +120,7 @@
           let items = DB().products();
           if (activeCat !== 'all') items = items.filter(p => p.categoryId === activeCat);
           if (term) items = items.filter(p => (p.name + ' ' + p.desc).toLowerCase().includes(term));
-          const catName = id => { const cat = cats.find(x => x.id === id); return cat ? cat.name : ''; };
-          if (!items.length) { list.innerHTML = UI().emptyState('search', 'No items found', 'Try a different keyword or category.'); return; }
+          if (!items.length) { list.innerHTML = UI().emptyState('search', 'Tidak ada item ditemukan', 'Coba kata kunci atau kategori lain.'); return; }
           list.innerHTML = items.map(p => {
             const tags = [p.featured ? '<span class="tag tag-olive">Favorit</span>' : '', !p.available ? '<span class="tag tag-red">Habis</span>' : ''].join('');
             return '<article class="prod-card ' + (!p.available ? 'soldout' : '') + '">' +
@@ -170,29 +169,29 @@
     const c = ctx(code);
     const g = guard(c); if (g) return { html: g };
     const p = DB().product(id);
-    if (!p) return { html: '<div class="cust-wrap">' + custHeader(c, 'Item') + UI().emptyState('alert', 'Item not found', 'This menu item may have been removed.') + '</div>' };
+    if (!p) return { html: '<div class="cust-wrap">' + custHeader(c, 'Item') + UI().emptyState('alert', 'Item tidak ditemukan', 'Item ini mungkin sudah dihapus.') + '</div>' };
     const groups = (p.modifierGroupIds || []).map(gid => DB().modGroups().find(m => m.id === gid)).filter(Boolean);
     return {
       html: '<div class="cust-wrap has-cta">' +
         '<header class="cust-top glass"><a class="icon-btn" href="#/t/' + c.code + '/menu" aria-label="Back">' + UI().icon('back', 18) + '</a><span class="top-title">Detail Item</span><span class="table-chip">' + UI().icon('chair', 13) + ' ' + esc(c.table.name) + '</span></header>' +
-        '<div class="pd-img"><img src="' + esc(p.image) + '" alt="' + esc(p.name) + '">' + (p.featured ? '<span class="pd-flag">' + UI().icon('star', 11) + ' House Specialty</span>' : '') + '</div>' +
+        '<div class="pd-img"><img src="' + esc(p.image) + '" alt="' + esc(p.name) + '">' + (p.featured ? '<span class="pd-flag">' + UI().icon('star', 11) + ' Andalan Kami</span>' : '') + '</div>' +
         '<div class="pd-body">' +
         '<div class="pd-head"><h1>' + esc(p.name) + '</h1><span class="pd-price">' + fmtRp(p.price) + '</span></div>' +
         '<p class="muted">' + esc(p.desc) + '</p>' +
-        '<div class="pd-chips"><span>' + UI().icon('coffee', 13) + ' Freshly prepared</span><span>' + UI().icon('check', 13) + ' Quality checked</span><span>' + UI().icon('clock', 13) + ' 5–12 min</span></div>' +
+        '<div class="pd-chips"><span>' + UI().icon('coffee', 13) + ' Disiapkan segar</span><span>' + UI().icon('check', 13) + ' Cek kualitas</span><span>' + UI().icon('clock', 13) + ' 5–12 menit</span></div>' +
         groups.map(gr =>
           '<section class="mod-group" data-group="' + gr.id + '" data-required="' + (gr.required ? 1 : 0) + '" data-max="' + gr.maxSel + '">' +
           '<div class="mg-head"><h3>' + esc(gr.name) + '</h3><span class="mg-rule">' + (gr.required ? 'Wajib · ' : '') + (gr.maxSel > 1 ? 'Pilih maks. ' + gr.maxSel : 'Pilih 1') + '</span></div>' +
           '<div class="mg-opts">' + gr.options.map((o, idx) => {
             const pre = gr.required && idx === 0 && gr.maxSel === 1;
-            return '<button class="mg-opt' + (pre ? ' selected' : '') + '" data-opt="' + o.id + '"><span class="mg-name">' + esc(o.name) + '</span><span class="mg-price">' + (o.price ? '+' + fmtRp(o.price) : 'Included') + '</span><span class="mg-radio"></span></button>';
+            return '<button class="mg-opt' + (pre ? ' selected' : '') + '" data-opt="' + o.id + '"><span class="mg-name">' + esc(o.name) + '</span><span class="mg-price">' + (o.price ? '+' + fmtRp(o.price) : 'Termasuk') + '</span><span class="mg-radio"></span></button>';
           }).join('') + '</div></section>'
         ).join('') +
         '<section class="mod-group"><div class="mg-head"><h3>Instruksi Khusus</h3><span class="mg-rule">Opsional</span></div>' +
-        '<textarea id="pd-note" class="input" rows="2" placeholder="e.g., extra napkin, separate cup, sensitive to heat..."></textarea></section>' +
+        '<textarea id="pd-note" class="input" rows="2" placeholder="mis. napkin tambahan, gelas terpisah, sensitif panas..."></textarea></section>' +
         '</div>' +
         '<div class="pd-cta glass">' +
-        '<div class="qty"><button id="q-minus" aria-label="Decrease">' + UI().icon('minus', 16) + '</button><span id="q-val">1</span><button id="q-plus" aria-label="Increase">' + UI().icon('plus', 16) + '</button></div>' +
+        '<div class="qty"><button id="q-minus" aria-label="Kurangi">' + UI().icon('minus', 16) + '</button><span id="q-val">1</span><button id="q-plus" aria-label="Tambah">' + UI().icon('plus', 16) + '</button></div>' +
         '<button class="btn btn-dark btn-lg" id="pd-add" ' + (!p.available ? 'disabled' : '') + '>' + (p.available ? 'Tambah ke Pesanan <span id="pd-total">' + fmtRp(p.price) + '</span>' : 'Tidak Tersedia') + '</button>' +
         '</div></div>',
       mount(el) {
@@ -260,7 +259,7 @@
   function renderCartBody(c, s, body) {
     let calc;
     try { calc = DB().computeCart(c.code); } catch (e) {
-      body.innerHTML = UI().emptyState('cart', 'Keranjang tidak tersedia', e.message, '<a class="btn btn-ghost" href="#/t/' + c.code + '/menu">Back to menu</a>');
+      body.innerHTML = UI().emptyState('cart', 'Keranjang tidak tersedia', e.message, '<a class="btn btn-ghost" href="#/t/' + c.code + '/menu">Kembali ke menu</a>');
       return;
     }
     if (!calc.lines.length) {
@@ -275,7 +274,7 @@
       { id: 'CASH', icn: 'cash', name: 'Bayar di Kasir', sub: 'Bayar tunai atau EDC di kasir' }
     ];
     body.innerHTML =
-      '<div class="dinein-note"><span>' + UI().icon('store', 16) + '</span><div><strong>' + esc(c.table.name) + ' · Dine-in Experience</strong><span>Freshly brewed and plated on demand. Served directly to your table.</span></div></div>' +
+      '<div class="dinein-note"><span>' + UI().icon('store', 16) + '</span><div><strong>' + esc(c.table.name) + ' · Makan di Tempat</strong><span>Disiapkan segar saat dipesan. Diantar langsung ke meja Anda.</span></div></div>' +
       '<div class="cart-head"><h2>Item Dipilih (' + calc.lines.reduce((a, l) => a + l.qty, 0) + ')</h2><a class="link" href="#/t/' + c.code + '/menu">+ Tambah item</a></div>' +
       calc.lines.map((l, i) => {
         const mods = l.modifiers.map(m => m.name + (m.price ? ' (+' + fmtRp(m.price) + ')' : '')).join(', ');
@@ -285,8 +284,8 @@
           (mods ? '<div class="ci-mods">' + esc(mods) + '</div>' : '') +
           (l.note ? '<div class="ci-mods note">"' + esc(l.note) + '"</div>' : '') +
           '<div class="ci-foot"><button class="btn-mini" data-edit="' + i + '">' + UI().icon('edit', 13) + ' Ubah opsi</button>' +
-          '<span class="qty sm"><button data-dec="' + i + '" aria-label="Decrease">' + UI().icon('minus', 14) + '</button><span>' + l.qty + '</span><button data-inc="' + i + '" aria-label="Increase">' + UI().icon('plus', 14) + '</button></span>' +
-          '<button class="icon-btn sm" data-del="' + i + '" aria-label="Remove">' + UI().icon('trash', 15) + '</button></div></div></div>';
+          '<span class="qty sm"><button data-dec="' + i + '" aria-label="Kurangi">' + UI().icon('minus', 14) + '</button><span>' + l.qty + '</span><button data-inc="' + i + '" aria-label="Tambah">' + UI().icon('plus', 14) + '</button></span>' +
+          '<button class="icon-btn sm" data-del="' + i + '" aria-label="Hapus">' + UI().icon('trash', 15) + '</button></div></div></div>';
       }).join('') +
       '<div class="summary-card glass"><div class="sum-head">' + UI().icon('slip', 16) + ' Ringkasan Pembayaran <span class="muted">· ' + esc(c.table.name) + '</span></div>' +
       '<div class="sum-row"><span>Subtotal</span><span>' + fmtRp(calc.subtotal) + '</span></div>' +
@@ -294,7 +293,7 @@
       '<div class="sum-row"><span>' + esc(s.serviceLabel) + '</span><span>' + fmtRp(calc.service) + '</span></div>' +
       '<div class="sum-row total"><span>Total Tagihan</span><span>' + fmtRp(calc.total) + '</span></div>' +
       '<div class="sum-note">Termasuk semua pajak &amp; layanan</div></div>' +
-      '<h3 class="sec-title">Pilih Metode Pembayaran span class="mg-rule">' + UI().icon('flame', 12) + ' Instant Confirmation</span></h3>' +
+      '<h3 class="sec-title">Pilih Metode Pembayaran <span class="mg-rule">' + UI().icon('flame', 12) + ' Konfirmasi Instan</span></h3>' +
       '<div class="pay-methods">' + methods.map((m, i) =>
         '<button class="pay-method' + (i === 0 ? ' selected' : '') + '" data-method="' + m.id + '"><span class="pm-icn">' + UI().icon(m.icn, 20) + '</span><span class="pm-txt"><strong>' + m.name + (m.tag ? ' <span class="tag tag-terra">' + m.tag + '</span>' : '') + '</strong><small>' + m.sub + '</small></span><span class="pm-check">' + UI().icon('check', 15) + '</span></button>'
       ).join('') + '</div>' +
@@ -320,8 +319,8 @@
       const p = DB().product(it.productId);
       UI().modal({
         title: 'Edit · ' + p.name,
-        body: '<p class="muted" style="margin-top:0">To change options precisely, remove this line and re-add the item from the menu.</p>',
-        footer: '<button class="btn btn-ghost" data-close>Keep item</button><button class="btn btn-danger" id="edit-rm">Remove line</button>',
+        body: '<p class="muted" style="margin-top:0">Untuk mengubah opsi, hapus item ini lalu tambahkan ulang dari menu.</p>',
+        footer: '<button class="btn btn-ghost" data-close>Biarkan</button><button class="btn btn-danger" id="edit-rm">Hapus item</button>',
         onMount(elm, close) {
           elm.querySelector('#edit-rm').addEventListener('click', () => { cart.splice(idx, 1); DB().saveCart(c.code, cart); close(); renderCartBody(c, s, body); UI().toast('Item dihapus'); });
         }
@@ -371,7 +370,7 @@
         const beCfg = window.KursiBackend && window.KursiBackend.config ? window.KursiBackend.config : {};
         const fnUrl = (beCfg.url ? beCfg.url.replace(/\/+$/, '') : location.origin) + '/functions/v1/xendit';
         const fnHdrs = { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (beCfg.key || ''), 'apikey': beCfg.key || '' };
-        let qrId = null, polling = null;
+        let polling = null;
         async function refresh() {
           const fresh = DB().order(o.id);
           if (fresh && fresh.paymentStatus === 'PAID') { if (polling) { clearInterval(polling); polling = null; } sessionStorage.removeItem('kursi_xendit_' + o.id); rerender(); return true; }
@@ -381,8 +380,7 @@
           try {
             const r = await fetch(fnUrl, { method: 'POST', headers: fnHdrs, body: JSON.stringify({ action: 'create', external_id: o.id, amount: o.total }) });
             const data = await r.json();
-            if (!data.ok) { box.innerHTML = '<p class="terra">Gateway belum siap.<br><span class="muted small">Deploy edge function xendit-qris &amp; pasang secret XENDIT_SECRET (lihat DEPLOY-XENDIT.md).</span></p>'; return; }
-            qrId = data.qr_id;
+            if (!data.ok) { box.innerHTML = '<p class="terra">Gateway belum siap.<br><span class="muted small">Deploy edge function xendit &amp; pasang secret XENDIT_SECRET (lihat DEPLOY-XENDIT.md).</span></p>'; return; }
             box.innerHTML = UI().qrImg(data.qr_string || ('KURSI|' + o.number + '|' + o.total), 190, 'QRIS Xendit') +
               '<p>Scan dengan aplikasi bank / e-wallet<br><span class="muted">Sandbox: tekan tombol di bawah untuk simulasi bayar</span></p>';
             sim.disabled = false;
@@ -391,40 +389,40 @@
         sim.addEventListener('click', async () => {
           sim.disabled = true;
           try {
-            await fetch(fnUrl, { method: 'POST', headers: fnHdrs, body: JSON.stringify({ action: 'simulate', qr_id: qrId, amount: o.total }) });
-            const p = box.querySelector('p:last-of-type'); if (p) p.innerHTML = '<span class="dot-live"></span> Menunggu konfirmasi webhook Xendit…';
+            await fetch(fnUrl, { method: 'POST', headers: fnHdrs, body: JSON.stringify({ action: 'complete', external_id: o.id }) });
+            const p = box.querySelector('p:last-of-type'); if (p) p.innerHTML = '<span class="dot-live"></span> Menyelesaikan pembayaran…';
           } catch (e) { UI().toast('Simulasi gagal', 'err'); sim.disabled = false; }
         });
         polling = setInterval(refresh, 3000);
-      },
+      }
     };
     return {
       html: '<div class="cust-wrap">' +
         custHeader(c, 'Pembayaran') +
         '<div class="pay-page">' +
-        '<div class="pay-card-top"><span class="tag tag-terra">CHECKOUT AMAN · SIMULASI</span><h2>Pesanan #' + o.number + '</h2><p class="muted">' + esc(c.table.name) + ' · Makan di tempat · ' + o.items.reduce((a, i) => a + i.qty, 0) + ' items</p></div>' +
+        '<div class="pay-card-top"><span class="tag tag-terra">CHECKOUT AMAN · SIMULASI</span><h2>Pesanan #' + o.number + '</h2><p class="muted">' + esc(c.table.name) + ' · Makan di tempat · ' + o.items.reduce((a, i) => a + i.qty, 0) + ' item</p></div>' +
         '<div class="pay-amount"><span>Total bayar</span><strong>' + fmtRp(o.total) + '</strong><span class="muted">' + esc(o.paymentMethod === 'QRIS' ? 'Standar QR Nasional · QRIS' : o.paymentMethod === 'CARD' ? 'Pembayaran kartu' : 'Pembayaran e-wallet') + '</span></div>' +
         (o.paymentMethod === 'QRIS' ?
-          '<div class="qris-box">' + UI().qrImg('KURSI|' + o.number + '|' + o.total + '|' + o.id, 190, 'QRIS payment code') + '<p>Scan with any banking / e-wallet app<br><span class="muted">Demo QR · no real money moves</span></p></div>' :
+          '<div class="qris-box">' + UI().qrImg('KURSI|' + o.number + '|' + o.total + '|' + o.id, 190, 'QRIS payment code') + '<p>Scan dengan aplikasi bank / e-wallet apa pun<br><span class="muted">QR demo · uang tidak benar-benar berpindah</span></p></div>' :
           o.paymentMethod === 'CARD' ?
-            '<div class="card-form"><div class="field"><label class="field-label">Nomor kartu</label><input class="input" value="4242 4242 4242 4242" readonly></div><div class="grid-2"><div class="field"><label class="field-label">Kedaluwarsa</label><input class="input" value="12/28" readonly></div><div class="field"><label class="field-label">CVC</label><input class="input" value="123" readonly></div></div><p class="muted small">Simulated card · details are prefilled for the demo.</p></div>' :
-            '<div class="qris-box"><span class="wallet-icn">' + UI().icon('wallet', 40) + '</span><p>Deep-link to <strong>GoPay / OVO / ShopeePay</strong><br><span class="muted">Simulated e-wallet authorization</span></p></div>') +
-        '<div class="pay-actions"><button class="btn btn-dark btn-lg btn-block" id="sim-pay">' + UI().icon('lock', 16) + ' Simulate Payment · ' + fmtRp(o.total) + '</button>' +
+            '<div class="card-form"><div class="field"><label class="field-label">Nomor kartu</label><input class="input" value="4242 4242 4242 4242" readonly></div><div class="grid-2"><div class="field"><label class="field-label">Kedaluwarsa</label><input class="input" value="12/28" readonly></div><div class="field"><label class="field-label">CVC</label><input class="input" value="123" readonly></div></div><p class="muted small">Kartu simulasi · detail sudah terisi untuk demo.</p></div>' :
+            '<div class="qris-box"><span class="wallet-icn">' + UI().icon('wallet', 40) + '</span><p>Deep-link ke <strong>GoPay / OVO / ShopeePay</strong><br><span class="muted">Otorisasi e-wallet simulasi</span></p></div>') +
+        '<div class="pay-actions"><button class="btn btn-dark btn-lg btn-block" id="sim-pay">' + UI().icon('lock', 16) + ' Simulasi Pembayaran · ' + fmtRp(o.total) + '</button>' +
         '<button class="btn btn-ghost btn-block" id="sim-fail">Simulasi Gagal</button></div>' +
-        '<p class="conn-line" style="margin-top:14px"><span><span class="dot-live"></span> Payment verified instantly</span><span>Ref auto-generated</span></p>' +
+        '<p class="conn-line" style="margin-top:14px"><span><span class="dot-live"></span> Pembayaran terverifikasi instan</span><span>Ref dibuat otomatis</span></p>' +
         '</div></div>',
       mount(el) {
         el.querySelector('#sim-pay').addEventListener('click', () => {
           const btn = el.querySelector('#sim-pay');
-          btn.disabled = true; btn.innerHTML = UI().icon('clock', 16) + ' Processing...';
+          btn.disabled = true; btn.innerHTML = UI().icon('clock', 16) + ' Memproses...';
           setTimeout(() => {
             try { DB().payOrder(o.id, o.paymentMethod, { amount: o.total, actorName: o.guestName || 'Tamu' }); rerender(); }
             catch (e) { UI().toast(e.message, 'err'); btn.disabled = false; }
           }, 1200);
         });
         el.querySelector('#sim-fail').addEventListener('click', () => {
-          DB().failPayment(o.id, 'Simulated decline by issuer');
-          UI().toast('Payment declined (simulation). Your order is kept · try again.', 'err');
+          DB().failPayment(o.id, 'Penolakan simulasi oleh issuer');
+          UI().toast('Pembayaran ditolak (simulasi). Pesanan Anda tersimpan · coba lagi.', 'err');
         });
       }
     };
@@ -435,11 +433,11 @@
     const c = ctx(code);
     const g = guard(c); if (g) return { html: g };
     const o = DB().order(id);
-    if (!o || o.sessionId !== DB().session(code)) return { html: '<div class="cust-wrap">' + custHeader(c, 'Order') + UI().emptyState('alert', 'Pesanan tidak ditemukan', '') + '</div>' };
-    if (o.paymentStatus === 'PAID') return { html: '<div class="cust-wrap">' + custHeader(c, 'Order') + '<div class="pay-success"><span class="ps-icn">' + UI().icon('check', 30) + '</span><h2>Pembayaran Tunai Terkonfirmasi</h2><p class="muted">The cashier has confirmed your payment. The kitchen is on it.</p><a class="btn btn-primary btn-lg btn-block" href="#/t/' + c.code + '/track/' + o.id + '">Lacak Pesanan</a></div></div>' };
+    if (!o || o.sessionId !== DB().session(code)) return { html: '<div class="cust-wrap">' + custHeader(c, 'Pesanan') + UI().emptyState('alert', 'Pesanan tidak ditemukan', '') + '</div>' };
+    if (o.paymentStatus === 'PAID') return { html: '<div class="cust-wrap">' + custHeader(c, 'Pesanan') + '<div class="pay-success"><span class="ps-icn">' + UI().icon('check', 30) + '</span><h2>Pembayaran Tunai Terkonfirmasi</h2><p class="muted">Kasir sudah mengonfirmasi pembayaran Anda. Dapur sedang memproses.</p><a class="btn btn-primary btn-lg btn-block" href="#/t/' + c.code + '/track/' + o.id + '">Lacak Pesanan</a></div></div>' };
     return {
       html: '<div class="cust-wrap">' + custHeader(c, 'Bayar di Kasir') +
-        '<div class="pay-page"><div class="pay-success pending"><span class="ps-icn warn">' + UI().icon('clock', 30) + '</span><h2>Pesanan #' + o.number + ' Sent to Kitchen</h2><p class="muted">Please pay <strong>' + fmtRp(o.total) + '</strong> at the counter · mention your table (' + esc(c.table.name) + '). This page updates automatically once the cashier confirms your payment.</p>' +
+        '<div class="pay-page"><div class="pay-success pending"><span class="ps-icn warn">' + UI().icon('clock', 30) + '</span><h2>Pesanan #' + o.number + ' Dikirim ke Dapur</h2><p class="muted">Silakan bayar <strong>' + fmtRp(o.total) + '</strong> di kasir · sebutkan meja Anda (' + esc(c.table.name) + '). Halaman ini otomatis terbarui setelah kasir mengonfirmasi.</p>' +
         '<div class="sum-row total" style="margin:18px 0"><span>Tagihan</span><span>' + fmtRp(o.total) + '</span></div>' +
         '<button class="btn btn-ghost btn-block" id="refresh-pay">Cek Status Pembayaran</button>' +
         '<a class="btn btn-primary btn-block" style="margin-top:10px" href="#/t/' + c.code + '/track/' + o.id + '">Lacak Status Pesanan</a></div></div></div>',
@@ -455,7 +453,7 @@
     { key: 'PREPARING', title: 'Barista & Dapur Memproses', desc: 'Dibuat segar dengan biji kopi sangrai saat ini.', icn: 'flame' },
     { key: 'READY', title: 'Cek Kualitas Lulus', desc: 'Pesanan Anda sudah siap dan menunggu di pass.', icn: 'star' },
     { key: 'SERVED', title: 'Diantar ke Meja Anda', desc: 'Pesanan hangat diantar langsung ke meja Anda.', icn: 'chair' },
-    { key: 'COMPLETED', title: 'Selamat Menikmati', desc: 'Order completed · thank you for dining with us.', icn: 'check' }
+    { key: 'COMPLETED', title: 'Selamat Menikmati', desc: 'Pesanan selesai · terima kasih sudah bersantap bersama kami.', icn: 'check' }
   ];
   window.Views.track = function (code, id) {
     const c = ctx(code);
@@ -465,7 +463,7 @@
     const o = id ? DB().order(id) : mine[0];
     if (!o || o.sessionId !== sess) {
       return {
-        html: '<div class="cust-wrap has-bn">' + custHeader(c, 'Track') +
+        html: '<div class="cust-wrap has-bn">' + custHeader(c, 'Lacak') +
           (mine.length ? '<div class="track-list-head"><h2>Pesanan Anda</h2></div>' +
             mine.map(x => '<a class="track-row" href="#/t/' + c.code + '/track/' + x.id + '"><span class="tr-num">#' + x.number + '</span><span class="tr-meta">' + esc(x.tableName) + ' · ' + new Date(x.createdAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + '</span>' + UI().badge(x.orderStatus) + '</a>').join('') :
             UI().emptyState('timer', 'Belum ada pesanan aktif', 'Status pesanan Anda akan muncul di sini secara langsung setelah checkout.', '<a class="btn btn-primary" href="#/t/' + c.code + '/menu">Lihat Menu</a>')) +
@@ -482,22 +480,22 @@
         custHeader(c, 'Lacak Pesanan') +
         '<div class="track-page">' +
         (paid && o.payments[0] ?
-          '<div class="track-pay glass"><span class="tag tag-olive">✓ Verified · ' + esc(o.paymentMethod === 'QRIS' ? 'National QR Standard' : o.paymentMethod) + '</span>' +
-          '<div class="tp-row"><span class="tp-qr">' + UI().icon('qr', 34) + '</span><div><span class="muted">Total Settled' + (o.paymentMethod === 'QRIS' ? ' via GoPay' : '') + '</span><strong>' + fmtRp(o.total) + '</strong></div><div class="tp-ref"><span>Ref: ' + esc(o.payments[o.payments.length - 1].ref) + '</span><span>Paid ' + new Date(o.payments[o.payments.length - 1].at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + '</span></div></div></div>' :
+          '<div class="track-pay glass"><span class="tag tag-olive">✓ Terverifikasi · ' + esc(o.paymentMethod === 'QRIS' ? 'Standar QR Nasional' : o.paymentMethod) + '</span>' +
+          '<div class="tp-row"><span class="tp-qr">' + UI().icon('qr', 34) + '</span><div><span class="muted">Total Terbayar' + (o.paymentMethod === 'QRIS' ? ' via GoPay' : '') + '</span><strong>' + fmtRp(o.total) + '</strong></div><div class="tp-ref"><span>Ref: ' + esc(o.payments[o.payments.length - 1].ref) + '</span><span>' + new Date(o.payments[o.payments.length - 1].at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + '</span></div></div></div>' :
           '<div class="track-pay glass warn"><span class="tag tag-warn">Menunggu Pembayaran</span><div class="tp-row"><div><strong>' + fmtRp(o.total) + '</strong><span class="muted">' + (o.paymentMethod === 'CASH' ? 'Bayar di kasir' : 'Selesaikan pembayaran untuk dikirim ke dapur') + '</span></div>' +
-          (o.paymentMethod === 'CASH' ? '<a class="btn btn-primary sm" href="#/t/' + c.code + '/cashier/' + o.id + '">Status</a>' : '<a class="btn btn-primary sm" href="#/t/' + c.code + '/pay/' + o.id + '">Pay Now</a>') + '</div></div>') +
-        '<div class="track-head"><span class="tag">DINE-IN · ' + esc(o.tableName) + '</span><h2>Pesanan #' + o.number + '</h2><span class="est">' + UI().icon('clock', 13) + ' EST. ARRIVAL <b>8–12m</b></span></div>' +
-        (cancelled ? '<div class="empty-state" style="padding:28px">' + UI().icon('alert', 30) + '<h4>Pesanan Dibatalkan</h4><p class="muted">This order was cancelled. Please place a new order if needed.</p></div>' :
+          (o.paymentMethod === 'CASH' ? '<a class="btn btn-primary sm" href="#/t/' + c.code + '/cashier/' + o.id + '">Status</a>' : '<a class="btn btn-primary sm" href="#/t/' + c.code + '/pay/' + o.id + '">Bayar Sekarang</a>') + '</div></div>') +
+        '<div class="track-head"><span class="tag">MAKAN DI TEMPAT · ' + esc(o.tableName) + '</span><h2>Pesanan #' + o.number + '</h2><span class="est">' + UI().icon('clock', 13) + ' ESTIMASI <b>8–12 menit</b></span></div>' +
+        (cancelled ? '<div class="empty-state" style="padding:28px">' + UI().icon('alert', 30) + '<h4>Pesanan Dibatalkan</h4><p class="muted">Pesanan ini dibatalkan. Silakan pesan ulang jika perlu.</p></div>' :
           '<div class="timeline">' + TRACK_STEPS.map((st, i) => {
             const done = i < idx, cur = i === idx && idx >= 0;
             const time = st.key === 'PAID' ? (o.payments[0] ? new Date(o.payments[0].at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : '') :
               o.timeline.find(t => t.status === st.key) ? new Date(o.timeline.find(t => t.status === st.key).at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : '';
             return '<div class="tl-step ' + (done ? 'done' : cur ? 'current' : 'todo') + '">' +
               '<span class="tl-icn">' + (done || cur ? UI().icon(cur ? st.icn : 'check', cur ? 17 : 15) : UI().icon(st.icn, 15)) + '</span>' +
-              '<div class="tl-body"><div class="tl-top"><strong>' + st.title + '</strong>' + (cur ? '<span class="tag tag-terra">NOW</span>' : '') + '<time>' + (done || cur ? time : '~' + (11 + i * 4) + ':' + String(24 + i * 6).padStart(2, '0')) + '</time></div>' +
+              '<div class="tl-body"><div class="tl-top"><strong>' + st.title + '</strong>' + (cur ? '<span class="tag tag-terra">SEKARANG</span>' : '') + '<time>' + (done || cur ? time : '~' + (11 + i * 4) + ':' + String(24 + i * 6).padStart(2, '0')) + '</time></div>' +
               '<p>' + st.desc + '</p></div></div>';
           }).join('') + '</div>') +
-        '<div class="summary-card"><div class="sum-head">' + o.items.reduce((a, i) => a + i.qty, 0) + ' Items in this Ticket <a class="link" href="#/t/' + c.code + '/track/' + o.id + '">Details ' + UI().icon('chevD', 13) + '</a></div>' +
+        '<div class="summary-card"><div class="sum-head">' + o.items.reduce((a, i) => a + i.qty, 0) + ' Item di Pesanan Ini <a class="link" href="#/t/' + c.code + '/track/' + o.id + '">Detail ' + UI().icon('chevD', 13) + '</a></div>' +
         o.items.map(i => {
           const p = DB().product(i.productId) || {};
           return '<div class="track-item"><img src="' + esc(p.image || 'assets/iced-latte.png') + '" alt="" class="ci-img"><div class="ci-body"><div class="ci-top"><span class="ci-name">' + i.qty + 'x ' + esc(i.name) + '</span><span class="ci-price">' + fmtRp(i.lineTotal) + '</span></div>' +
@@ -506,8 +504,8 @@
         '<div class="sum-row"><span>Subtotal</span><span>' + fmtRp(o.subtotal) + '</span></div>' +
         '<div class="sum-row"><span>Pajak &amp; Layanan (15%)</span><span>' + fmtRp(o.tax + o.service) + '</span></div>' +
         '<div class="sum-row total"><span>Total Dibayar</span><span>' + fmtRp(o.total) + '</span></div></div>' +
-        '<button class="btn btn-ghost btn-block" id="call-staff">' + UI().icon('bell', 16) + ' Need help? Call Staff to ' + esc(o.tableName) + '</button>' +
-        (['COMPLETED', 'CANCELLED'].includes(o.orderStatus) ? '<a class="btn btn-dark btn-block" href="#/t/' + c.code + '/menu">Add more items to this table ' + UI().icon('plus', 15) + '</a>' : '') +
+        '<button class="btn btn-ghost btn-block" id="call-staff">' + UI().icon('bell', 16) + ' Butuh bantuan? Panggil staf ke ' + esc(o.tableName) + '</button>' +
+        (['COMPLETED', 'CANCELLED'].includes(o.orderStatus) ? '<a class="btn btn-dark btn-block" href="#/t/' + c.code + '/menu">Tambah item untuk meja ini ' + UI().icon('plus', 15) + '</a>' : '') +
         '</div>' +
         bottomNav(c, 'track') + '</div>',
       mount(el) {
